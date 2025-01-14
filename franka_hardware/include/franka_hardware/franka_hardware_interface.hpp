@@ -30,6 +30,7 @@
 #include "franka_action_server.hpp"
 #include "franka_hardware/franka_executor.hpp"
 #include "franka_hardware/franka_param_service_server.hpp"
+#include "franka_hardware/franka_desk_client.hpp"
 #include "franka_hardware/robot.hpp"
 
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;

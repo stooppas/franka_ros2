@@ -21,6 +21,7 @@ find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(Franka 0.13.2 REQUIRED)
 find_package(rclcpp_components REQUIRED)
+find_package(Poco REQUIRED COMPONENTS Foundation XML JSON Net Util Crypto NetSSL)
 
 add_library(franka_hardware SHARED
         src/franka_action_server.cpp
@@ -28,6 +29,7 @@ add_library(franka_hardware SHARED
         src/robot.cpp
         src/franka_param_service_server.cpp
         src/franka_executor.cpp
+        src/franka_desk_client.cpp
 )
 
 target_include_directories(
@@ -45,6 +47,8 @@ ament_target_dependencies(
         rclcpp_action
         franka_msgs
 )
+
+target_link_libraries(franka_hardware Poco::Foundation Poco::XML Poco::JSON Poco::Util Poco::Net Poco::Crypto Poco::NetSSL)
 
 pluginlib_export_plugin_description_file(hardware_interface franka_hardware.xml)
 

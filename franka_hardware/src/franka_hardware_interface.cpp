@@ -285,6 +285,11 @@ CallbackReturn FrankaHardwareInterface::on_init(const hardware_interface::Hardwa
                   "Please use the latest franka_description package from: "
                   "https://github.com/frankaemika/franka_description");
     }
+
+    FrankaDeskClient client(robot_ip);
+    client.login();
+    client.release_brakes();
+
     try {
       RCLCPP_INFO(getLogger(), "Connecting to robot at \"%s\" ...", robot_ip.c_str());
       robot_ = std::make_shared<Robot>(robot_ip, getLogger());
