@@ -63,7 +63,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 arm_parameter_name,
-                default_value='fr3',
+                default_value='fer',
                 description=(
                     'Name of the arm in the URDF file. This is used to generate the joint '
                     'names of the gripper.'

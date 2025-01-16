@@ -135,11 +135,6 @@ CallbackReturn FrankaHardwareInterface::on_deactivate(
   RCLCPP_INFO(getLogger(), "trying to Stop...");
   robot_->stopRobot();
 
-  if(!franka_desk_client->shutdown())
-  {
-    return CallbackReturn::ERROR;
-  }
-
   RCLCPP_INFO(getLogger(), "Stopped");
   return CallbackReturn::SUCCESS;
 }
@@ -292,16 +287,28 @@ CallbackReturn FrankaHardwareInterface::on_init(const hardware_interface::Hardwa
                   "https://github.com/frankaemika/franka_description");
     }
 
-    RCLCPP_INFO(getLogger(),"Starting FrankaDeskClient");
-    franka_desk_client = std::make_shared<FrankaDeskClient>(robot_ip);
-    if(!franka_desk_client->startup())
-    {
-      return CallbackReturn::ERROR;
-    }
-
     try {
       RCLCPP_INFO(getLogger(), "Connecting to robot at \"%s\" ...", robot_ip.c_str());
       robot_ = std::make_shared<Robot>(robot_ip, getLogger());
+
+      auto req = std::make_shared<franka_msgs::srv::SetFullCollisionBehavior::Request>();
+      const std::array<double,7> arr7 = {100.0,100.0,100.0,100.0,100.0,100.0,100.0};
+      const std::array<double,6> arr6 = {100.0,100.0,100.0,100.0,100.0,100.0};
+
+      req->lower_torque_thresholds_acceleration = arr7;
+      req->upper_torque_thresholds_acceleration = arr7;
+
+      req->lower_torque_thresholds_nominal = arr7;
+      req->upper_torque_thresholds_nominal = arr7;
+
+      req->lower_force_thresholds_acceleration = arr6;
+      req->upper_force_thresholds_acceleration = arr6;
+
+      req->lower_force_thresholds_nominal = arr6;
+      req->upper_force_thresholds_nominal = arr6;
+
+      robot_->setFullCollisionBehavior(req);
+
     } catch (const franka::Exception& e) {
       RCLCPP_FATAL(getLogger(), "Could not connect to robot");
       RCLCPP_FATAL(getLogger(), "%s", e.what());

@@ -30,7 +30,6 @@
 #include "franka_action_server.hpp"
 #include "franka_hardware/franka_executor.hpp"
 #include "franka_hardware/franka_param_service_server.hpp"
-#include "franka_hardware/franka_desk_client.hpp"
 #include "franka_hardware/robot.hpp"
 
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
@@ -85,7 +84,6 @@ class FrankaHardwareInterface : public hardware_interface::SystemInterface {
   std::shared_ptr<FrankaParamServiceServer> service_node_;
   std::shared_ptr<ActionServer> action_node_;
   std::shared_ptr<FrankaExecutor> executor_;
-  std::shared_ptr<FrankaDeskClient> franka_desk_client;
 
   // Torque joint commands for the effort command interface
   std::array<double, kNumberOfJoints> hw_effort_commands_{0, 0, 0, 0, 0, 0, 0};

@@ -29,7 +29,6 @@ add_library(franka_hardware SHARED
         src/robot.cpp
         src/franka_param_service_server.cpp
         src/franka_executor.cpp
-        src/franka_desk_client.cpp
 )
 
 target_include_directories(
