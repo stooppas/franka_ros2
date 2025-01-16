@@ -134,6 +134,12 @@ CallbackReturn FrankaHardwareInterface::on_deactivate(
     const rclcpp_lifecycle::State& /*previous_state*/) {
   RCLCPP_INFO(getLogger(), "trying to Stop...");
   robot_->stopRobot();
+
+  if(!franka_desk_client->shutdown())
+  {
+    return CallbackReturn::ERROR;
+  }
+
   RCLCPP_INFO(getLogger(), "Stopped");
   return CallbackReturn::SUCCESS;
 }
@@ -286,9 +292,12 @@ CallbackReturn FrankaHardwareInterface::on_init(const hardware_interface::Hardwa
                   "https://github.com/frankaemika/franka_description");
     }
 
-    FrankaDeskClient client(robot_ip);
-    client.login();
-    client.release_brakes();
+    RCLCPP_INFO(getLogger(),"Starting FrankaDeskClient");
+    franka_desk_client = std::make_shared<FrankaDeskClient>(robot_ip);
+    if(!franka_desk_client->startup())
+    {
+      return CallbackReturn::ERROR;
+    }
 
     try {
       RCLCPP_INFO(getLogger(), "Connecting to robot at \"%s\" ...", robot_ip.c_str());

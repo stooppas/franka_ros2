@@ -7,14 +7,19 @@ class FrankaDeskClient
 {
     public:
     FrankaDeskClient(std::string& ip);
+    bool startup();
+    bool shutdown();
+
+    private:
 
     bool login();
+    bool request_token();
+    bool release_token();
     bool release_brakes();
     bool engage_brakes();
     bool enable_fci();
-    bool disable_fci();
-
-    private:
+    bool home_gripper();
+    bool logout();
 
     std::string _ip;
     std::string auth_cookie;
